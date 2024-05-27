@@ -1,0 +1,87 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model IEnumerable<DataTransferObjects.DTOs.Workplace>
+
+@{
+    ViewData["Title"] = "Workplaces";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create">Register A New Workplace</a>
+</p>
+<div class="row">
+    <div class="col-md-6">
+        <form class="d-flex" asp-action="Index">
+            <input name="searchString" class="form-control me-1" type="search" placeholder="Search" aria-label="Search" />
+            @Html.DropDownList("searchby", (IEnumerable<SelectListItem>)ViewData["datalist"], new { @class = "form-control" })
+            <button class="btn btn-dark" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <a asp-action="Index" class="text-dark">Clear Search</a>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Holder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RatingWithStars)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Holder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RatingWithStars)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new
+    {
+        page = page,
+        searchfor = Context.Request.Query["searchfor"],
+        searchby = @Context.Request.Query["searchby"]
+    }),
+    new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" } })

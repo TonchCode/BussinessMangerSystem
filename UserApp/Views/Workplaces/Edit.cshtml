@@ -1,0 +1,126 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using DataTransferObjects.DTOs;
+@model DataTransferObjects.DTOs.Workplace
+
+@{
+    ViewData["Title"] = "Edit";
+}
+@{
+    PagedList<Job> jobs = ViewData["List<Jobs>"] as PagedList<Job>;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Workplace</h4>
+<hr />
+<div class="row">
+    <table>
+        <tr>
+            <td>
+                <div class="col-md-11">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="City" class="control-label"></label>
+                            <input asp-for="City" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Holder" class="control-label"></label>
+                            <input asp-for="Holder" class="form-control" />
+                            <span asp-validation-for="Holder" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DateCreated" class="control-label"></label>
+                            <input asp-for="DateCreated" class="form-control" />
+                            <span asp-validation-for="DateCreated" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="RatingWithStars" class="control-label"></label>
+                            <input asp-for="RatingWithStars" class="form-control" />
+                            <span asp-validation-for="RatingWithStars" class="text-danger"></span>
+                        </div>
+                        <p></p>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                        @Html.HiddenFor(m=>m.Id)
+                    </form>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => jobs.FirstOrDefault().Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => jobs.FirstOrDefault().Title)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => jobs.FirstOrDefault().IsRemoteAvailable)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => jobs.FirstOrDefault().JobCreationDate)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in jobs)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsRemoteAvailable)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.JobCreationDate)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "Edit", "Jobs", new { id = item.Id }) |
+                                        @Html.ActionLink("Details", "Details", "Jobs", new { id = item.Id }) |
+                                        @Html.ActionLink("Remove", "Edit", "Workplaces", new { id = Model.Id, jobId = item.Id, workId = Model.Id, rem = 1 })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @Html.ActionLink("Add a Job", "AddAJobToWorkplace", "Workplaces", new { workId = Model.Id })
+                <p></p>
+                @Html.PagedListPager((IPagedList)jobs, page => Url.Action("Edit", new
+                {
+                id = Model.Id,
+                page = page,
+                searchfor = Context.Request.Query["searchfor"],
+                searchby = @Context.Request.Query["searchby"]
+                }),
+                new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" } })
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

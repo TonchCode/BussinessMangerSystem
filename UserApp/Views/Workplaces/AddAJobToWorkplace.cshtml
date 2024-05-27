@@ -1,0 +1,76 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@model IEnumerable<DataTransferObjects.DTOs.Job>
+
+@{
+    ViewData["Title"] = "Add A Job To Your Workplace";
+}
+
+<h1>@ViewData["Title"]</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinSalary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsRemoteAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JobCreationDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinSalary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinHours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsRemoteAvailable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobCreationDate)
+            </td>
+            <td>
+                    @Html.ActionLink("Add this job to Workplace", "Edit", "Workplaces", new { id = ViewData["workId"], jobId = item.Id, workId = ViewData["workId"] })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("AddAJobToWorkplace", new
+    {
+        workId = ViewData["workId"],
+        page = page,
+        searchfor = Context.Request.Query["searchfor"],
+        searchby = @Context.Request.Query["searchby"]
+    }),
+    new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" } })
